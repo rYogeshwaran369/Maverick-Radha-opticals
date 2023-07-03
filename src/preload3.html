@@ -1,0 +1,97 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 id="custid">j</h1>
+
+
+
+
+    <script>
+         // Get the quesry parameters from the URL
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+
+      // Get the username value
+      const username = urlParams.get('username');
+
+      // Display the userid
+      const useridElement = document.getElementById('custid');
+      useridElement.textContent = username;
+
+    </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Hello World!</title>
+  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+  
+</head>
+<body>
+  <!-- top navigation -->
+  <div class="top-nav">
+    <div>
+     
+        <img onclick="navigateToPage('index')" class="top-nav-left-img" src="https://res.cloudinary.com/dxhmtgtpg/image/upload/v1688030495/logo_75-01_vgdwyi.png"/>
+     
+    </div>
+
+    <div>
+      
+        <img onclick="navigateToPage('preload1')" class="top-nav-right-img" src="https://res.cloudinary.com/dxhmtgtpg/image/upload/v1688032228/adduser_li07on.png"/>
+
+    </div>
+  </div>
+
+  <!-- top image -->
+
+  <!-- Add your image section here -->
+
+  <!-- customer id input -->
+  <div class="input-div" style="margin-top: -70px;">
+    <div style="display: flex;flex-direction: column;justify-content: center;align-items: center;">
+        <div style="width: 400px;height: 200px;margin-bottom: 37%;">
+            <img src="https://res.cloudinary.com/dxhmtgtpg/image/upload/v1688030495/logo_75-01_vgdwyi.png"/>
+          </div>
+     <h1 style="font-size: 30px;font-family: 'Times New Roman', Times, serif;">Points Successfully Added</h1>
+     <h1 style="font-size: 30px;font-family: 'Times New Roman', Times, serif;" id="curp"></h1>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  
+  
+  <script>
+
+
+// alert(document.getElementById('cusid').value);
+
+function navigateToPage(pageName, data) {
+      const { ipcRenderer } = require('electron');
+      ipcRenderer.send('navigate-to-pages', pageName, data);
+    }
+
+
+    const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+
+      // Get the username value
+      const username = urlParams.get('username');
+      const useridElement = document.getElementById('curp');
+      useridElement.textContent ="Current Points "+ username;
+
+
+</script>
+</body>
+</html>

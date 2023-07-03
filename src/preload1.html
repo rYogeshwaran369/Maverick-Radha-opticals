@@ -26,38 +26,38 @@
     <!-- User rInputs -->
     <div style="width: 100%;height: 95%; display: flex;justify-content: center;align-items: center;flex-direction: column;">
         <div>
-            <h1 style="font-size: 30px;text-align: start;margin-bottom: 2%;">NEW USER REGISTRATION</h1>
+            <h1 style="font-family: 'Times New Roman', Times, serif; font-size: 30px;text-align: start;margin-bottom: 2%;">NEW USER REGISTRATION</h1>
         </div>
         <div class="input-cont"> 
 
         <div style="display: flex;flex-direction: row;justify-content: space-between;width: 45%;margin: 30px;">
-            <h1 style="font-size: 20px;font-weight: bold;">Customer Name : </h1>
+            <h1 style="font-family: 'Times New Roman', Times, serif; font-size: 20px;font-weight: bold;">Customer Name : </h1>
             <input  id="name" type="text" style="width: 56%;font-size: 20px;font-weight: bold;"/>
         </div>
 
         <div style="display: flex;flex-direction: row;justify-content: space-between;width: 45%;margin: 30px;">
-            <h1 style="font-size: 20px;font-weight: bold;">Customer Contact : </h1>
+            <h1 style="font-family: 'Times New Roman', Times, serif; font-size: 20px;font-weight: bold;">Customer Contact : </h1>
             <input id="contact" style="width: 50%;font-size: 20px;font-weight: bold;"/>
         </div>
 
         <div style="display: flex;flex-direction: row;justify-content: space-between;width: 45%;margin: 30px;">
-            <h1 style="font-size: 20px;font-weight: bold;">Customer Email : </h1>
+            <h1 style="font-family: 'Times New Roman', Times, serif; font-size: 20px;font-weight: bold;">Customer Email : </h1>
             <input id="gmail" type="email" style="width: 56%;font-size: 20px;font-weight: bold;"/>
         </div>
 
         <div style="display: flex;flex-direction: row;align-items: center; justify-content: space-between;width: 45%;margin: 30px;">
-            <h1 style="font-size: 20px;font-weight: bold;">Customer Address : </h1>
+            <h1 style="font-family: 'Times New Roman', Times, serif; font-size: 20px;font-weight: bold;">Customer Address : </h1>
             <textarea id="address" style="width: 50%;height: 60px;font-size: 15px;font-weight: bold;"></textarea>
         </div>
 
         <div style="display: flex;flex-direction: row;align-items: center; justify-content: space-between;width: 45%;margin: 30px;">
-            <h1 style="font-size: 20px;font-weight: bold;">Customer Address : </h1>
+            <h1 style="font-family: 'Times New Roman', Times, serif; font-size: 20px;font-weight: bold;">Select Branch : </h1>
           
             <select id="branch" style="width: 50%;height: 30px;">
-                <option value="br1">Branch 1</option>
-                <option value="br2">Branch 2</option>
-                <option value="br3">Branch 3</option>
-                <option value="br4">Branch 4</option>
+                <option value="br1">Hi-tech (4-roads), Salem-07</option>
+                <option value="br2">Near 5 Roads, Salem-04</option>
+                <option value="br3">1st Agraharam, Salem-01 </option>
+                <option value="br4">Thiruvakavundanur bypass, SALEM -5</option>
             </select>
         </div>
         
@@ -97,7 +97,7 @@ function navigateToPage(pageName) {
         branches = document.getElementById('branch').value;
        
         if (!username || !contact || !gmail || !address || ! branches) {
-            alert('Please fill in all the required fields.');
+            // alert('Please fill in all the required fields.');
             return false;
         }
         else{
@@ -112,7 +112,7 @@ function navigateToPage(pageName) {
 
         firebase
                 .database()
-                .ref("customer/" + branches + "/")
+                .ref("customersdata/" + branches + "/")
                 .orderByKey()
                 .limitToLast(1)
                 .once("value")
@@ -133,7 +133,7 @@ function navigateToPage(pageName) {
                             var customerid = branches.replace(/\s+/g, '') + "_" + newId.toString().padStart(3, '0');
                             firebase
                                 .database()
-                                .ref("customer/" + branches + "/" + customerid)
+                                .ref("customersdata/" + branches + "/" + customerid)
                                 .set({
                                     id: newId,
                                     customerid: customerid,
@@ -141,37 +141,47 @@ function navigateToPage(pageName) {
                                     email: gmail,
                                     address:address,
                                     contact: contact,
-                                    points:50
-                                });
-
-                            alert("New User Added Succesfully with cusetomer Id : "+customerid);
+                                    points:0
+                                })
+                                .then(() => {
+                                // alert("New User Added Successfully with customer Id: " + customerid);
+                                const newurl = 'preload4.html?userid=' + encodeURIComponent(customerid);
+                                window.location.href = newurl;
+                                console.log(customerid);
+                                // window.reloadApp()
+                            });
                         });
                     } else {
                         // Handle the case when there is no existing data
                         var newId = 1;
                         Assign();
-
+                        
                         var customerid = branches.replace(/\s+/g, '') + "_" + newId.toString().padStart(3, '0');
                         firebase
-                            .database()
-                            .ref("customer/" + branches + "/" + customerid)
-                            .set({
+                        .database()
+                        .ref("customersdata/" + branches + "/" + customerid)
+                        .set({
                                     id: newId,
                                     customerid: customerid,
                                     username: username,
                                     email: gmail,
                                     address:address,
                                     contact: contact,
-                                    points:50
+                                    points:0
+                            })
+                            
+                            .then(() => {
+                                // alert("New User Added Successfully with customer Id: " + customerid);
+                                const newurl = 'preload4.html?userid=' + encodeURIComponent(customerid);
+                                window.location.href = newurl;
+                                console.log(customerid);
+                                // window.reloadApp()
                             });
-
-                            alert("New User Added Succesfully with cusetomer Id : "+customerid);
-                            window.reloadApp()
-                    }
-                })
+                        }
+                    })
                 .catch(function(error) {
                     console.log("Error retrieving last data:", error);
-                    window.reloadApp()
+                    // window.reloadApp()
                 });
         }
         else
@@ -182,13 +192,14 @@ function navigateToPage(pageName) {
     }
 
       const firebaseConfig = {
-          apiKey: "AIzaSyASRfo6_z-BSQr-lVWqf57gy24qSI7GxbY",
-          authDomain: "radha-opticals-6c267.firebaseapp.com",
-          projectId: "radha-opticals-6c267",
-          storageBucket: "radha-opticals-6c267.appspot.com",
-          messagingSenderId: "122285195240",
-          appId: "1:122285195240:web:c699c53072d194431fae5d",
-          measurementId: "G-BK74PT22ZW"
+        apiKey: "AIzaSyDw9WzBRX7XQ_Fk75pDAnwARcY7W9JKA9Q",
+  authDomain: "radha-opticals-3d5e2.firebaseapp.com",
+  databaseURL: "https://radha-opticals-3d5e2-default-rtdb.firebaseio.com",
+  projectId: "radha-opticals-3d5e2",
+  storageBucket: "radha-opticals-3d5e2.appspot.com",
+  messagingSenderId: "856065428006",
+  appId: "1:856065428006:web:745c76fc248c4fbc0274e7",
+  measurementId: "G-L7XBMPBQS3"
       };
 
 // Initialize Firebase

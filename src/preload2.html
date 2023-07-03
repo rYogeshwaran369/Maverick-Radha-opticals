@@ -27,28 +27,28 @@
       <!-- User Inputs -->
       <div style="width: 100%;height: 95%; display: flex;justify-content: center;align-items: center;flex-direction: column;">
           <div>
-              <h1 id="custid" style="font-size: 30px;text-align: start;margin-bottom: 2%;"></h1>
+              <h1 id="custid" style="font-family:'Times New Roman', Times, serif;  font-size: 30px;text-align: start;margin-bottom: 2%;"></h1>
           </div>
           <div class="input-cont"> 
   
           <div style="display: flex;flex-direction: row;justify-content: space-between;width: 45%;margin: 30px;">
-              <h1 id="username" style="font-size: 20px;font-weight: bold;"></h1>
+              <h1 id="username" style="font-family:'Times New Roman', Times, serif;font-size: 20px;font-weight: bold;"></h1>
           </div>
   
           <div style="display: flex;flex-direction: row;justify-content: space-between;width: 45%;margin: 30px;">
-              <h1 id="usercontact" style="font-size: 20px;font-weight: bold;"></h1>
+              <h1 id="usercontact" style="font-family:'Times New Roman', Times, serif;font-size: 20px;font-weight: bold;"></h1>
           </div>
   
-          <div style="display: flex;flex-direction: row;justify-content: space-between;width: 45%;margin: 30px;">
-              <h1 id="gmail" style="font-size: 20px;font-weight: bold;"></h1>
-          </div>
-  
-          <div style="display: flex;flex-direction: row;align-items: center; justify-content: space-between;width: 45%;margin: 30px;">
-              <h1 id="address" style="font-size: 20px;font-weight: bold;"></h1>
+          <div style="display: flex;flex-direction: row;justify-content: space-between;width: 50%;margin: 30px;">
+              <h1 id="gmail" style="font-family:'Times New Roman', Times, serif;font-size: 20px;font-weight: bold;"></h1>
           </div>
   
           <div style="display: flex;flex-direction: row;align-items: center; justify-content: space-between;width: 45%;margin: 30px;">
-              <h1 id="cur_points" style="font-size: 20px;font-weight: bold;"></h1>
+              <h1 id="address" style="font-family:'Times New Roman', Times, serif;font-size: 20px;font-weight: bold;"></h1>
+          </div>
+  
+          <div style="display: flex;flex-direction: row;align-items: center; justify-content: space-between;width: 45%;margin: 30px;">
+              <h1 id="cur_points" style="font-family:'Times New Roman', Times, serif;font-size: 20px;font-weight: bold;"></h1>
           </div>
 
           
@@ -75,13 +75,14 @@ ipcRenderer.on('page-data', (event, data) => {
 });
 
     const firebaseConfig = {
-          apiKey: "AIzaSyASRfo6_z-BSQr-lVWqf57gy24qSI7GxbY",
-          authDomain: "radha-opticals-6c267.firebaseapp.com",
-          projectId: "radha-opticals-6c267",
-          storageBucket: "radha-opticals-6c267.appspot.com",
-          messagingSenderId: "122285195240",
-          appId: "1:122285195240:web:c699c53072d194431fae5d",
-          measurementId: "G-BK74PT22ZW"
+      apiKey: "AIzaSyDw9WzBRX7XQ_Fk75pDAnwARcY7W9JKA9Q",
+  authDomain: "radha-opticals-3d5e2.firebaseapp.com",
+  databaseURL: "https://radha-opticals-3d5e2-default-rtdb.firebaseio.com",
+  projectId: "radha-opticals-3d5e2",
+  storageBucket: "radha-opticals-3d5e2.appspot.com",
+  messagingSenderId: "856065428006",
+  appId: "1:856065428006:web:745c76fc248c4fbc0274e7",
+  measurementId: "G-L7XBMPBQS3"
       };
 
       // Initialize Firebase
@@ -102,7 +103,7 @@ ipcRenderer.on('page-data', (event, data) => {
 
       // Display the userid
       const useridElement = document.getElementById('custid');
-      useridElement.textContent = customerid;
+      useridElement.textContent = "Customer Id : "+customerid;
 
       // Display the username
       const usernameElement = document.getElementById('username');
@@ -137,7 +138,7 @@ ipcRenderer.on('page-data', (event, data) => {
 
   firebase
     .database()
-    .ref("customer/" + br + "/" + pcusid)
+    .ref("customersdata/" + br + "/" + pcusid)
     .once("value", function (snap) {
       const userData = snap.val();
       if (userData) {
@@ -155,30 +156,40 @@ ipcRenderer.on('page-data', (event, data) => {
 
         firebase
           .database()
-          .ref("customer/" + br + "/" + pcusid)
+          .ref("customersdata/" + br + "/" + pcusid)
           .update({
             points: pointstruct + p
           })
           .then(() => {
             isPointsAdded = true; // Set the flag to true indicating points have been added
             const updatedPoints = pointstruct + p;
-            alert("Points updated. Updated points: " + updatedPoints);
+            // alert("Points updated. Updated points: " + updatedPoints);
+            const newPageUrl = "preload3.html?username=" + encodeURIComponent(updatedPoints);
+            console.log("points,  "+updatedPoints)
 
             // Send email to the user
             const emailContent = `
               <html>
                 <head>
-                  <title>Points Updated</title>
+                  <title>Radha Opticals</title>
                 </head>
                 <body>
-                  <h1>Points Updated</h1>
-                  <p>Updated points: ${updatedPoints}</p>
+                  <h1>Greetings from Radha Opticals </h1>
+                  <h2>Thank you for your recent purchase!</h2>
+                  <h2> We are grateful for your support and trust in our product.</h2>
+                  <h2>You’ve earned ${updatedPoints} points on your bill amount of ${amnt}.</h2>
+                  <h2>We look forward to serving you again and providing you with exceptional experiences.</h2>
                 </body>
               </html>
             `;
 
-            sendEmailToUser(emailContent);
-            window.location.href = 'index.html';
+            sendEmailToUser(emailContent)
+              .then(() => {
+                  window.location.href = newPageUrl; // Redirect after completing the email sending process
+                })
+                .catch(error => {
+                  console.log("Error sending email:", error);
+                });
           })
           .catch(error => {
             console.log("Error updating points:", error);
@@ -192,33 +203,33 @@ ipcRenderer.on('page-data', (event, data) => {
 const nodemailer = require('nodemailer');
 
 function sendEmailToUser(content) {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'radhaopticalsalem@gmail.com', // replace with your Gmail address
-      pass: 'hbaehrfkzlrauspi' // replace with your Gmail password or app password
-    }
-  });
+  return new Promise((resolve, reject) => {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'radhaopticalsalem@gmail.com', // replace with your Gmail address
+        pass: 'hbaehrfkzlrauspi' // replace with your Gmail password or app password
+      }
+    });
 
-  const mailOptions = {
-    from: 'radhaopticalsalem@gmail.com', // replace with your Gmail address
-    to: 'ryogeshwaran369@gmail.com', // replace with the recipient's email address
-    subject: 'Points Updated',
-    html: content
-  };
+    const mailOptions = {
+      from: 'radhaopticalsalem@gmail.com', // replace with your Gmail address
+      to: email, // replace with the recipient's email address
+      subject: 'Points Updated',
+      html: content
+    };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.error('Error sending email:', error);
-    
-    } else {
-      console.log('Email sent:', info.response);
-      // window.reloadApp()
-      
-    }
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.error('Error sending email:', error);
+        reject(error);
+      } else {
+        console.log('Email sent:', info.response);
+        resolve();
+      }
+    });
   });
 }
-
     </script>
 </body>
 </html>

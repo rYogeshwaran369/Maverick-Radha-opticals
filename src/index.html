@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>Hello World!</title>
+  <title>Radha Opticals</title>
   <link rel="stylesheet" href="index.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
   
@@ -29,10 +29,10 @@
   <!-- customer id input -->
   <div class="input-div">
     <div style="display: flex;flex-direction: column;">
-      <input id="cusid" class="inputs" placeholder="Enter Customer ID"/>
-      <input id="amount" class="inputs" placeholder="Enter Total Amount"/>
+      <input id="cusid" class="inputs" placeholder="Enter Customer ID" required/>
+      <input id="amount" class="inputs" placeholder="Enter Total Amount" required/>
     </div>
-    <button id="txt" onclick="FindId()" class="button is-info">ENTER</button>
+    <button type="button" id="txt" onclick="FindId()" class="button is-info">ENTER</button>
   </div>
 
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -56,7 +56,7 @@ function navigateToPage(pageName, data) {
 
   firebase
     .database()
-    .ref("customer/" + br + "/")
+    .ref("customersdata/" + br + "/")
     .orderByChild("customerid")
     .equalTo(custid)
     .once("value")
@@ -73,47 +73,35 @@ function navigateToPage(pageName, data) {
 
           const newPageUrl = "preload2.html?username=" + encodeURIComponent(username) + "&pointsv=" + encodeURIComponent(pointsv) + "&contact=" + encodeURIComponent(contact) + "&email=" + encodeURIComponent(email) + "&address=" + encodeURIComponent(address) + "&id=" + encodeURIComponent(custid) + "&amount=" + encodeURIComponent(amount);
 
-          // Clear and enable the input fields
-          document.getElementById('cusid').value = "";
-          document.getElementById('amount').value = "";
-          document.getElementById('cusid').disabled = false;
-          document.getElementById('amount').disabled = false;
+          
 
           window.location.href = newPageUrl;
         });
       } else {
-        alert("No matching data found");
-        console.log(document.getElementById('cusid').value);
-        console.log(document.getElementById('amount').value);
-        console.log("Before clearing and enabling input fields");
-        document.getElementById('cusid').value = "";
-        document.getElementById('amount').value = "";
-        document.getElementById('cusid').disabled = false;
-        document.getElementById('amount').disabled = false;
-        console.log("ec" + document.getElementById('cusid').value);
-        console.log(document.getElementById('amount').value);
+        // alert("No matching data found");
+        console.log('no match')
+        window.location.href = "preload5.html";
+       
       }
     })
     .catch(function (error) {
-      alert("Error retrieving data: " + error);
-      console.log("Before clearing and enabling input fields");
-      document.getElementById('cusid').value = "";
-          document.getElementById('amount').value = "";
-          document.getElementById('cusid').disabled = false;
-          document.getElementById('amount').disabled = false;
+      // alert("Error retrieving data: " + error);
+      console.log(error)
+      
     });
 }
 
 
     const firebaseConfig = {
       // Your Firebase configuration
-      apiKey: "AIzaSyASRfo6_z-BSQr-lVWqf57gy24qSI7GxbY",
-          authDomain: "radha-opticals-6c267.firebaseapp.com",
-          projectId: "radha-opticals-6c267",
-          storageBucket: "radha-opticals-6c267.appspot.com",
-          messagingSenderId: "122285195240",
-          appId: "1:122285195240:web:c699c53072d194431fae5d",
-          measurementId: "G-BK74PT22ZW"
+      apiKey: "AIzaSyDw9WzBRX7XQ_Fk75pDAnwARcY7W9JKA9Q",
+  authDomain: "radha-opticals-3d5e2.firebaseapp.com",
+  databaseURL: "https://radha-opticals-3d5e2-default-rtdb.firebaseio.com",
+  projectId: "radha-opticals-3d5e2",
+  storageBucket: "radha-opticals-3d5e2.appspot.com",
+  messagingSenderId: "856065428006",
+  appId: "1:856065428006:web:745c76fc248c4fbc0274e7",
+  measurementId: "G-L7XBMPBQS3"
     };
 
     // Initialize Firebase
